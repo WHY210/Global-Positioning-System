@@ -31,7 +31,6 @@ def time(time):
             GPSday += month_leap[i] 
         GPSday += date[2]
     GPSday = str("0" + str(GPSday))
-    print(GPSday)
     return GPSday
     
 
@@ -41,7 +40,26 @@ path = str(input("欲存放的資料夾位置 : "))
 path = path.replace("\\","/")
 os.chdir(path)
 
+
+"""
+url = "https://cddis.nasa.gov/archive/gnss/data/daily/" + Time[0:4] + "/" + time(Time) + "/22n/"
+headers = {'content-type': 'text/html; charset=UTF-8',
+           'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36'}
+html = requests.get(url=url,headers=headers,timeout=30)
+soup = BeautifulSoup(html.content,'html.parser')
+"""
 file = "brdc" + time(Time) + "0.22n.gz"
+"""
+r = requests.get(soup[file], headers=headers, stream=True, verify=False, auth=('why24', 'tatsumi24'))
+with open("./"+file, "wb") as brdc:
+    for chunk in r.iter_content(chunk_size=1024):
+        if chunk:
+            brdc.write(chunk)
+            brdc.close()
+"""
+
+
+
 
 ##解壓縮gz檔
 import gzip
@@ -54,7 +72,8 @@ un_gz(path + "/" + file)
 
 ##生成CSV檔
 file = file[0:-3]
-os.rename(file, file + ".csv")
+if not os.path.exists(file + ".csv"): 
+    os.rename(file, file + ".csv")
 
 ##讀取CSV檔
 import pandas as pd
@@ -75,7 +94,7 @@ for i in range(len(a)):
 VariableList = dict.fromkeys(["DateTime"], str(a[0][19*0:19*1]))
 VariableList.update(dict.fromkeys(["a0", "a1", "a2"], (float(a[0][19*c:19*c]) for c in range(1,4))))
 VariableList.update(dict.fromkeys(["AgeOfEphemeris", "Crs", "delta_n", "M0"], (float(a[1][19*c:19*c]) for c in range(4))))
- VariableList.update(dict.fromkeys(["toe", "Cic", "BigOmega0", "Cis"], (float(a[3][19*c:19*c]) for c in range(4))))
+VariableList.update(dict.fromkeys(["toe", "Cic", "BigOmega0", "Cis"], (float(a[3][19*c:19*c]) for c in range(4))))
 VariableList.update(dict.fromkeys(["i0", "Crc", "omega", "BigOmega1"], (float(a[4][19*c:19*c]) for c in range(4))))
 VariableList.update(dict.fromkeys(["i1", None, None, None], (float(a[5][19*c:19*c]) for c in range(4))))
 """
@@ -181,13 +200,20 @@ X = X / 1000
 Y = Y / 1000
 Z = Z / 1000
 
-print(X, Y, Z)
-
+print("坐標為(", X, Y, Z, ")(km)")
 
 ###誤差
 X_IGS = 14581.408067
 Y_IGS = -1494.739422
 Z_IGS = 21889.107258
+error_X = X-X_IGS
+error_Y = Y-Y_IGS
+error_Z = Z-Z_IGS
+P_error_X = error_X / X_IGS *100
+P_error_Y = error_Y / Y_IGS *100
+P_error_Z = error_Z / Z_IGS *100
+print("誤差為(", error_X, error_Y, error_Z, ")(km)")
+print("百分誤差為(", P_error_X, P_error_Y, P_error_Z, ")(%)")
 
 """
 class BroadcastEphemeris:
