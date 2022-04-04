@@ -2,17 +2,64 @@
 ####by:WHY/2022.4.3
 
 ##從CDDIS下載廣播星曆壓縮檔
-#import requests
-#url = "https://cddis.nasa.gov/archive/gnss/data/daily/"
+import requests
+from bs4 import BeautifulSoup
+
+Time = str(input("請輸入要求的時刻(以空格隔開，例如作業為2022 2 5 0 15 0.0) : "))
+weekday = int(input("請輸入星期幾，例如星期六則輸入6 : "))
+def time(time):
+    date = Time.split(" ")
+    ##判斷閏年(1:閏年)
+    if int(date[0]) % 4 == 0: 
+        leap = 1
+        if int(date[0]) % 100 == 0:
+            if int(date[0]) % 400 == 0: leap = 1
+            else: leap = 0
+    else: leap = 0
+    ##計算GPSday
+    month      = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    month_leap = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    GPSday = 0
+    ##平年
+    if leap == 0:
+        for i in range(int(date[1])-1):
+            GPSday += month[i] 
+        GPSday += int(date[2])
+    ##閏年
+    if leap == 1:
+        for i in range(int(date[1])-1):
+            GPSday += month_leap[i] 
+        GPSday += date[2]
+    GPSday = str("0" + str(GPSday))
+    print(GPSday)
+    return GPSday
+    
 
 ##更改檔案絕對路徑
 import os
-from tkinter import Variable
-os.chdir("C:/Users/dulci/OneDrive - 國立陽明交通大學/大二/下/GPS/HW2/廣播星曆(n)")
+path = str(input("欲存放的資料夾位置 : "))
+path = path.replace("\\","/")
+os.chdir(path)
+
+file = "brdc" + time(Time) + "0.22n.gz"
+
+##解壓縮gz檔
+import gzip
+def un_gz(file_name):
+    f_name = file_name.replace("gz", "")
+    g_file = gzip.GzipFile(file_name)
+    open(f_name, "wb+").write(g_file.read())
+    g_file.close()
+un_gz(path + "/" + file)
+
+##生成CSV檔
+file = file[0:-3]
+os.rename(file, file + ".csv")
 
 ##讀取CSV檔
 import pandas as pd
-df = pd.read_csv("brdc0360_22n.csv")
+file = "brdc" + time(Time) + "0.22n.csv"
+df = pd.read_csv(file, delimiter="\t")
 
 ##整理資料
 df = df.loc[7:12]
@@ -75,8 +122,6 @@ a_ = (sqrt_a)**2
 n0 = float((μ/(a_**3))**(0.5))
 
 ### Step3：計算觀測時刻與參考時刻之時間差tk
-Time = str(input("請輸入要求的時刻(以空格隔開，例如作業為2022 2 5 0 15 0.0) : "))
-weekday = int(input("請輸入星期幾，例如星期六則輸入6 : "))
 Time = Time[2:]
 Time = Time.split(" ")
 t = (24*60*60)*weekday + (60*60)*float(Time[3]) + (60)*float(Time[4]) + float(Time[5])
@@ -156,5 +201,4 @@ class BroadcastEphemeris:
         print(f"{self.CoordinateName}坐標的誤差 = ", Error, "(m), 大約是", PercentError, "(%)") 
 
 BroadcastEphemeris(X)
-
 """
