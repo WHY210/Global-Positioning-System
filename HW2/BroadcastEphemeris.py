@@ -172,7 +172,6 @@ def btnPressed():
     ###誤差（第五題）
     ##精密星曆的資料
     IGS = IGS.split(",")
-    print(IGS)
     X_IGS = float(IGS[0] )
     Y_IGS = float(IGS[1] )
     Z_IGS = float(IGS[2] )
@@ -197,26 +196,29 @@ def btnPressed():
     f.close()
 
 ###輸入區
+label0 = tkinter.Label(win, text="請先自行下載當天之廣播星曆檔，將其移至你欲存放的資料夾位置，但不須解壓縮")
+label0.place(x=20, y=20)
 label1 = tkinter.Label(win, text="請輸入要求的時刻，以空格隔開，例如作業為2022 2 5 0 15 0.0 : ")
-label1.place(x=20, y=20)
+label1.place(x=20, y=40)
 entry1 = tkinter.Entry(win)
-entry1.place(x=375, y=20)
+entry1.place(x=375, y=40)
 label2 = tkinter.Label(win, text="請輸入星期幾，例如作業為星期六則輸入6 : ")
-label2.place(x=20, y=40)
+label2.place(x=20, y=60)
 entry2 = tkinter.Entry(win)
-entry2.place(x=265, y=40)
+entry2.place(x=265, y=60)
 label3 = tkinter.Label(win, text="欲存放的資料夾位置 : ")
-label3.place(x=20, y=60)
+label3.place(x=20, y=80)
 entry3 = tkinter.Entry(win)
-entry3.place(x=145, y=60)
+entry3.place(x=145, y=80)
 label4 = tkinter.Label(win, text="請對照當天此時刻之精密星曆輸入X Y Z 坐標,以逗號「,」間隔 : ")
-#14581.408067,-1494.739422,21889.107258
-label4.place(x=20, y=80)
+label4.place(x=20, y=100)
+label5 =tkinter.Label(win, text="例如作業則為輸入 14581.408067,-1494.739422,21889.107258")
+label5. place(x=20, y=120)
 entry4 = tkinter.Entry(win)
-entry4.place(x=365, y = 80)
+entry4.place(x=375, y = 120)
 
 ###按鍵
 btn1 = tkinter.Button(win, text="確認", command=btnPressed)
-btn1.place(x = 480, y=120)
+btn1.place(x = 500, y=160)
 
 win.mainloop()
