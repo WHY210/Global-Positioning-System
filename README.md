@@ -1,7 +1,6 @@
-
 # Precise-Ephemeris
 GPS-HW1第8題：精密星曆之衛星速度加速度-時間圖 \
-  igs21056.sp3 (edition1)：要先依照指示下載並更改精密星曆檔 \
+  igs21056.sp3 (edition1)：要先依照指示下載並更改精密星曆檔，20220205前三顆衛星專用 \
   igsxxxxx.sp3 (edition2)：要先依照指示下載並更改精密星曆檔，要輸入想取的衛星數/當天的衛星數 
 
 # Broadcast-Ephemeris
