@@ -1,36 +1,47 @@
-####全球定位系統概論HW1第8題
-####:by:WHY/2022.3.18
+# coding=utf-8
 
-###前置作業
-##STEP1:查詢GPS week (上網打GPS week對照)
-##STEP2:於CDDIS網站下載精密星曆 
-    # 點選"Data and Produsts" -> "GNSS" -> "Produc holdings" -> "Precise orbits"
-    # https://cddis.nasa.gov/archive/gnss/products
-    # 善用ctrl+F尋找所求的GPS week的資料夾
-    # 善用ctrl+F尋找所求的檔案 : igsxxxxx.sp3.Z (xxxxx = GPS week + 星期幾 例如2022/02/05星期六為igs21956.sp3.Z)
-##STEP3:以7-zip或WinRAR解壓縮 : igsxxxxx.sp3
-##STEP4:把sp3檔轉存成csv檔 (更蓋副檔名) : igsxxxxx.csv
-##STEP5:以EXCEL開啟並刪除前面22列 (從日期出現開始保留)
-##STEP6:選取第一欄全部，以資料剖析("資料" -> "資料剖析")讓資料以空格分配至每一格
+####2022全球定位系統概論HW1第8題:精密星曆之衛星速度加速度-時間圖
+####by:WHY/2022.3.18
 
 
-###檔案存放位置 ("..."內更改為你存放的資料夾位置，\改成/)
-##更改檔案絕對路徑
-import os
-os.chdir("C:/Users/dulci/OneDrive - 國立陽明交通大學/大二/下/GPS/HW1/過程用的檔案")
+###前置作業:我不會寫程式所以只能手動:)
+
+print("\n\n查詢GPS week (上網打GPS week對照)。")
+gpsweek = input("GPS week = ")
+gpsday = input("week day = ")
+import webbrowser
+print("\n於CDDIS網站下載精密星曆:登入CDDIS網站，點選Data and Produsts -> GNSS -> Produc holdings -> Precise orbits")
+print("ctrl+F尋找所求的GPS week的資料夾，點選以打開資料夾")
+print("ctrl+F尋找所求的檔案 : igsxxxxx.sp3.Z (xxxxx = GPS week + 星期幾 例如2022/02/05星期六為igs21956.sp3.Z)，點選以下載")
+if int(input("\n直接前往網站按1，不要就隨便按:")) == 1:
+    webbrowser.open("https://cddis.nasa.gov/archive/gnss/products" )
+print("\n以7-zip或WinRAR解壓縮:igsxxxxx.sp3")
+print("以EXCEL開啟sp3檔，並刪除前面22列 (從日期出現開始保留)，選取第一欄全部")
+print("以資料剖析(資料 -> 資料剖析)讓資料以空格分配至每一格")
+print("轉存成csv檔:igsxxxxx.csv \n\n")
+import time
+time.sleep(3)
 
 
 ###資料讀取與初步處理
 
-##讀取CSV檔
+##檔案存放絕對路徑 ("..."內為存放的資料夾位置，把檔案放那！)
+import os
+Directory = os.getcwd()
+path = str(Directory + "\\GPS_PreciseOrbits")
+if not os.path.exists(path): os.mkdir(path)
+os.chdir(path)
+
+##讀取CSV檔 (不是igsxxxxx.csv就自己改)
 import pandas as pd
-igs = pd.read_csv("igs21956.csv")
+file = "igs" + gpsweek + gpsday 
+igs = pd.read_csv(file + ".csv")
 
-###詢問要幾顆衛星
+##詢問要幾顆衛星
 amount = int(input("要取前幾筆衛星? "))
-SatelliteAmount = int(input("當天總共幾顆衛星"))
+SatelliteAmount = int(input("當天總共幾顆衛星? "))
 
-##刪除行，只保留各項PG01/PG02/PG03
+##刪除行，只保留各項要取的衛星:PG01/PG02/PG03...
 #00/01/02
 #33/34/35
 #66/67/68
@@ -46,7 +57,7 @@ igs.drop(columns= ['clock(ms)','x-sdev(mm)','y-sdev(mm)','z-sdev(mm)','c-sdev(ps
 #print(igs)
 
 ##輸出整理後的新檔案
-igs.to_csv("igs21956_new.csv", index=False)
+igs.to_csv("igs%s_new.csv" %(file), index=False)
 
 
 
@@ -54,14 +65,13 @@ igs.to_csv("igs21956_new.csv", index=False)
 ##import
 import matplotlib.pyplot as plt
 ##路徑
-Directory = os.getcwd()
 if not os.path.exists('v-t'):
     os.mkdir('v-t')
-path_vt = os.path.join(Directory, 'v-t')
-os.chdir(Directory)
+path_vt = (path + '\\v-t')
+os.chdir(path)
 if not os.path.exists('a-t'): 
     os.mkdir('a-t')
-path_at = os.path.join(Directory, 'a-t')
+path_at = (path + '\\a-t')
         
 ###class
 class PreciseEphemeris:
@@ -147,4 +157,4 @@ for j in range(amount):
     x(j+1)
     y(j+1)
     z(j+1)
-    
+print("\n\n好了可以交作業了讚")
