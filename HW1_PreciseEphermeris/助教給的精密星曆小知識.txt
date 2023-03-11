@@ -11,7 +11,7 @@ sp3檔的存儲方式為 ASCII 文字檔，包括表頭資訊以及內容。
 內容：每隔15分鐘給出衛星的位置，有時還給出衛星的速度。如果需要其他時刻的衛星位置，可以由給出的衛星位置進行插值得到。
 
 
- 參考網站
+參考網站
  https://www.igs.org/products   這裡面有寫各種星曆的介紹、週期、精度...很讚
  https://www.igs.org/products#precise_orbits
  https://blog.csdn.net/tyst08/article/details/104382206   
