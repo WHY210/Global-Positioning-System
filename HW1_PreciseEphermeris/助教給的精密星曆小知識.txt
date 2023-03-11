@@ -1,0 +1,17 @@
+IGS精密星曆採用sp3格式，其檔案名的命名規則為：AAAWWWWD.sp3。
+AAA表示類型標識（IGS、IGU、IGR）或者分析中心的縮寫（如MIT、SIO、GFZ等），
+IGS會綜合所有分析中心的產品加權平均得到最終的產品（標識為IGS、IGR、IGU）； 
+WWWW 表示GPS周數（GPS Week）； 
+D    表示周幾（範圍0~6，0表示周日，1表示週一）。
+HH   表示2-digit hour (00, 06, 12, 18)
+TYP  表示type of solution
+.Z   表示壓縮檔UNIX compressed file
+
+sp3檔的存儲方式為 ASCII 文字檔，包括表頭資訊以及內容。
+內容：每隔15分鐘給出衛星的位置，有時還給出衛星的速度。如果需要其他時刻的衛星位置，可以由給出的衛星位置進行插值得到。
+
+
+ 參考網站
+ https://www.igs.org/products   這裡面有寫各種星曆的介紹、週期、精度...很讚
+ https://www.igs.org/products#precise_orbits
+ https://blog.csdn.net/tyst08/article/details/104382206   
