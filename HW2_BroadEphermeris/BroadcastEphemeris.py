@@ -52,20 +52,20 @@ def btnPressed():
 
     ##更改檔案絕對路徑
     import os
-    path = path.replace("\\","/")
+    path = path.replace("\\","\\\\")
     os.chdir(path)
     ##檔名
-    file = "brdc" + time(Time) + "0.22n.gz"
+    file = "brdc" + time(Time) + "0.%sn.gz" %(Time[2:4])
 
 
     ##解壓縮gz檔
-    import gzip
-    def un_gz(file_name):
-        f_name = file_name.replace("gz", "")
-        g_file = gzip.GzipFile(file_name)
-        open(f_name, "wb+").write(g_file.read())
-        g_file.close()
-    un_gz(path + "/" + file)
+    #import gzip
+    #def un_gz(file_name):
+    #    f_name = file_name.replace("gz", "")
+    #    g_file = gzip.GzipFile(file_name)
+    #    open(f_name, "wb+").write(g_file.read())
+    #    g_file.close()
+    #un_gz(path + "/" + file)
 
     ##生成CSV檔
     file = file[0:-3]
@@ -74,7 +74,7 @@ def btnPressed():
 
     ##讀取CSV檔
     import pandas as pd
-    file = "brdc" + time(Time) + "0.22n.csv"
+    file = "brdc" + time(Time) + "0.%sn.csv" %(Time[2:4])
     df = pd.read_csv(file, delimiter="\t")
 
     ##整理資料
@@ -222,3 +222,5 @@ btn1 = tkinter.Button(win, text="確認", command=btnPressed)
 btn1.place(x = 500, y=160)
 
 win.mainloop()
+
+
